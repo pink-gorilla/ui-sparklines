@@ -3,4 +3,4 @@
 **End Users** this project is not for you.
 
 
-A wrapper for react-player to play videos.
+A wrapper for react-sparklines.
