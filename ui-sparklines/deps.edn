@@ -24,6 +24,46 @@
                  babashka/fs {:mvn/version "0.0.5"}}
           :ns-default build}
 
+ :goldly
+  {:extra-deps {org.pinkgorilla/goldly {:mvn/version "0.4.592"}
+                org.pinkgorilla/devtools {:mvn/version "0.0.5"}
+                nrepl/nrepl {:mvn/version "1.0.0"}
+                cider/cider-nrepl {:mvn/version "0.28.3"}}
+   :exec-fn modular.system/start!
+   :exec-args {:profile "jetty"
+               :config ["webly/config.edn" "goldly/config.edn"
+                        {:goldly {:routes {:app {"" :goldly/no-page
+                                                 "devtools/scratchpad" :scratchpad
+                                                 "devtools/viewer" :viewer
+                                                 "devtools/repl" :repl
+                                                 "devtools/theme" :theme
+                                                 "devtools/build" :build
+                                                 "devtools/runtime" :runtime
+                                                 "devtools/pages" :pages
+                                                 "devtools/help" :devtools
+                                                 "goldly/reload" :goldly/reload-cljs}}}
+                         :reval {:collections {:demo [:clj "demo/notebook/"]
+                                               :demo-cljs [:cljs "demo/notebook/"]}}
+
+                         }
+
+                        ]
+               :services "goldly/services.edn"}}
+
+  :npm-install
+  {:exec-fn goldly.app.build/goldly-build
+   :exec-args {:profile "npm-install"}}
+  
+  :compile
+  {:exec-fn goldly.app.build/goldly-build
+   :exec-args {:profile "compile2"}}
+
+  :release-adv
+  {:exec-fn goldly.app.build/goldly-build
+   :exec-args {:profile "release-adv"}}
+
+  
+
 ;
   }}
 

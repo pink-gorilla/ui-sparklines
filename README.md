@@ -4,3 +4,9 @@
 
 
 A wrapper for react-sparklines.
+
+```
+clj -X:goldly:npm-install
+clj -X:goldly:compile
+clj -X:goldly
+```

@@ -38,3 +38,6 @@ creds-localhost.edn
 \#*\#
 .\#*
 .~*
+ui-sparklines/karma.conf.js
+ui-sparklines/resources/META-INF/
+ui-sparklines/src/goldly_bindings_generated.cljs
