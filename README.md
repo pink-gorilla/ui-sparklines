@@ -6,6 +6,7 @@
 A wrapper for react-sparklines.
 
 ```
+cd ui-video
 clj -X:goldly:npm-install
 clj -X:goldly:compile
 clj -X:goldly

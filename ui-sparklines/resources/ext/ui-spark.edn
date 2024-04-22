@@ -1,8 +1,8 @@
 {:name "ui-spark"
  ; build
- :lazy-sci true
+ :lazy true
  :cljs-namespace [ui.spark]
- :cljs-ns-bindings {'ui.spark {'bar ui.spark/sparkline-bar
-                               'spot ui.spark/sparkline-spot
-                               'line ui.spark/sparkline}}}
+ :cljs-ns-bindings {'ui.spark {'bar ui.spark/bar
+                               'spot ui.spark/spot
+                               'line ui.spark/line}}}
 
