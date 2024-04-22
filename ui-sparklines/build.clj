@@ -1,12 +1,13 @@
 (ns build
   (:require
    [clojure.tools.build.api :as b]
-   [org.corfield.build :as bb] ; https://github.com/seancorfield/build-clj
- ))
-
+   [deps-deploy.deps-deploy :as dd]))
 
 (def lib 'org.pinkgorilla/ui-sparklines)
-(def version (format "0.0.%s" (b/git-count-revs nil)))
+(def version (format "0.2.%s" (b/git-count-revs nil)))
+(def class-dir "target/classes")
+(def basis (b/create-basis {:project "deps.edn"}))
+(def jar-file (format "target/%s-%s.jar" (name lib) version))
 
 (def pom-template
   [[:licenses
@@ -21,20 +22,26 @@
     [:connection "scm:git:git://github.com/pink-gorilla/ui-sparklines.git"]
     [:developerConnection "scm:git:ssh://git@github.com/pink-gorilla/ui-sparklines.git"]]])
 
+(def opts {:class-dir class-dir
+           :lib lib
+           :version version
+           :basis basis
+           :pom-data pom-template
+           :src-dirs ["src"]})
 
-(defn jar "build the JAR" [opts]
-  (println "Building the JAR")
-  (-> opts
-      (assoc :lib lib
-             :version version
-             :pom-data pom-template
-             :transitive true)
-      (bb/jar)))
+(defn jar [_]
+  (println "Building jar ..")
+  (b/write-pom opts)
+  (b/copy-dir {:src-dirs ["src"
+                          "resources"]
+               :target-dir class-dir})
+  (b/jar {:class-dir class-dir
+          :jar-file jar-file}))
 
-
-(defn deploy "Deploy the JAR to Clojars." [opts]
-  (println "Deploying to Clojars.")
-  (-> opts
-      (assoc :lib lib 
-             :version version)
-      (bb/deploy)))
+(defn deploy "Deploy the JAR to Clojars." [_]
+  (println "Deploying to Clojars ..")
+  (dd/deploy {:installer :remote
+              ;:sign-releases? true
+              :pom-file (b/pom-path (select-keys opts [:lib :class-dir]))
+              ;:artifact "target/tech.ml.dataset.jar"
+              :artifact (b/resolve-path jar-file)}))
